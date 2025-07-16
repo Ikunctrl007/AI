@@ -29,8 +29,8 @@
 				register: false,
 				globalConfig: getApp().globalData.config,
 				wxLoginForm: {
-					appId: "wx7ab54a2f9a5bd7f3",
-					appSecret: "aeb131eb4dc7265d0c8cba4d292652f4",
+					appId: "wx1938fb33688ee9ff",
+					appSecret: "4b0ad6190126be112818b2b515c13c23",
 					code: "",
 					encryptedIv: "",
 					encryptedData: "",

@@ -1,18 +1,27 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8" v-loading="loading">
- 
-
     <div class="max-w-7xl mx-auto px-4">
       <!-- 对话列表 -->
-      <div class="space-y-8" @scroll="handleScroll" ref="scrollContainer" style="overflow-y: auto; max-height: 80vh;">
+      <div
+        class="space-y-8"
+        @scroll="handleScroll"
+        ref="scrollContainer"
+        style="overflow-y: auto; max-height: 80vh"
+      >
         <!-- 单个对话块 -->
-        <div v-for="(item, index) in dialogList" :key="index" class="dialog-card">
+        <div
+          v-for="(item, index) in dialogList"
+          :key="index"
+          class="dialog-card"
+        >
           <!-- 用户提问区域 -->
           <div class="user-question">
             <div class="user-info">
               <div class="user-name">{{ item.userName }}</div>
               <br />
-              <div style="font-weight: bold;" class="question-text">{{ item.question }}</div>
+              <div style="font-weight: bold" class="question-text">
+                {{ item.question }}
+              </div>
               <br />
               <div class="question-time">{{ item.questionTime }}</div>
             </div>
@@ -20,14 +29,22 @@
 
           <!-- AI回答卡片网格 -->
           <div class="response-grid">
-            <div v-for="(model, mIndex) in item.aiResponses" :key="mIndex" class="response-card" @click="showModelResponse(model)">
+            <div
+              v-for="(model, mIndex) in item.aiResponses"
+              :key="mIndex"
+              class="response-card"
+              @click="showModelResponse(model)"
+            >
               <!-- 模型标题 -->
               <div class="model-title">
                 <i class="fas fa-robot model-icon"></i>
                 <h3 class="model-name">{{ model.name }}</h3>
               </div>
               <!-- 预览内容 -->
-              <div class="preview-content" v-html="renderMarkdown(model.preview)"></div>
+              <div
+                class="preview-content"
+                v-html="renderMarkdown(model.preview)"
+              ></div>
               <!-- 时间 -->
               <div class="response-time">{{ model.responseTime }}</div>
             </div>
@@ -48,10 +65,15 @@
           </button>
         </div>
         <div class="modal-content">
-          <div class="prose" v-html="renderMarkdown(selectedModel.content)"></div>
+          <div
+            class="prose"
+            v-html="renderMarkdown(selectedModel.content)"
+          ></div>
         </div>
         <div class="modal-footer">
-          <div class="response-time-footer">{{ selectedModel.responseTime }}</div>
+          <div class="response-time-footer">
+            {{ selectedModel.responseTime }}
+          </div>
         </div>
       </div>
     </div>
@@ -60,24 +82,24 @@
 
 <script>
 import { getNodeLog } from "@/api/wechat/aigc";
-import { marked } from 'marked';
+import { marked } from "marked";
 
 export default {
   data() {
     return {
       // 遮罩层
       loading: true,
-      total:0,
+      total: 0,
       queryParams: {
         page: 1,
         limit: 3, // 默认每页查询 3 条数据
-        keyWord: '',
-        flowStatus: '',
-        id: ''
+        keyWord: "",
+        flowStatus: "",
+        id: "",
       },
       showModal: false,
       selectedModel: null,
-      dialogList: []
+      dialogList: [],
     };
   },
   created() {
@@ -86,16 +108,17 @@ export default {
   methods: {
     getList() {
       this.loading = true;
-      getNodeLog(this.queryParams).then(res => {
+      console.log(this.queryParams);
+      getNodeLog(this.queryParams).then((res) => {
         // 添加新数据到列表
+        console.log(res.data);
         this.total = res.data.total;
         if (this.queryParams.page === 1) {
           this.dialogList = res.data.list;
         } else {
-          res.data.list.forEach(item => {
+          res.data.list.forEach((item) => {
             this.dialogList.push(item);
           });
-
         }
         this.loading = false;
       });
@@ -116,7 +139,10 @@ export default {
     handleScroll(event) {
       const container = event.target;
       // 判断是否滚动到底部
-      if (container.scrollHeight - container.scrollTop === container.clientHeight) {
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
         this.queryParams.page += 1; // 下一页
         this.getList();
       }
@@ -127,22 +153,28 @@ export default {
         const jsonData = JSON.parse(content);
         if (Array.isArray(jsonData)) {
           // 如果是数组，转换为 Markdown 列表
-          return marked(jsonData.map(item => {
-            let markdown = '';
-            if (item.title) markdown += `### ${item.title}\n\n`;
-            if (item.abstract) markdown += `${item.abstract}\n\n`;
-            if (item.content) markdown += `${item.content}\n\n`;
-            if (item.publish_time) markdown += `发布时间: ${item.publish_time}\n\n`;
-            if (item.url) markdown += `[查看原文](${item.url})\n\n`;
-            return markdown;
-          }).join('---\n\n'));
-        } else if (typeof jsonData === 'object') {
+          return marked(
+            jsonData
+              .map((item) => {
+                let markdown = "";
+                if (item.title) markdown += `### ${item.title}\n\n`;
+                if (item.abstract) markdown += `${item.abstract}\n\n`;
+                if (item.content) markdown += `${item.content}\n\n`;
+                if (item.publish_time)
+                  markdown += `发布时间: ${item.publish_time}\n\n`;
+                if (item.url) markdown += `[查看原文](${item.url})\n\n`;
+                return markdown;
+              })
+              .join("---\n\n")
+          );
+        } else if (typeof jsonData === "object") {
           // 如果是单个对象，转换为 Markdown 格式
-          let markdown = '';
+          let markdown = "";
           if (jsonData.title) markdown += `### ${jsonData.title}\n\n`;
           if (jsonData.abstract) markdown += `${jsonData.abstract}\n\n`;
           if (jsonData.content) markdown += `${jsonData.content}\n\n`;
-          if (jsonData.publish_time) markdown += `发布时间: ${jsonData.publish_time}\n\n`;
+          if (jsonData.publish_time)
+            markdown += `发布时间: ${jsonData.publish_time}\n\n`;
           if (jsonData.url) markdown += `[查看原文](${jsonData.url})\n\n`;
           return marked(markdown);
         }
@@ -150,11 +182,10 @@ export default {
         // 如果不是 JSON，直接渲染原始内容
         return marked(content);
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
 
 <style>
 /* 全局样式 */
@@ -280,10 +311,9 @@ body {
   transition: box-shadow 0.3s ease;
 }
 
-.response-card img{
+.response-card img {
   width: 300px;
   height: 150px;
-
 }
 .response-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -364,7 +394,6 @@ body {
   color: #1f2937;
 }
 
-
 .modal-content {
   padding: 1.5rem;
   overflow-y: auto;
@@ -390,7 +419,6 @@ body {
 }
 
 .prose {
-
   color: #374151;
   line-height: 1.75;
 }
@@ -405,17 +433,17 @@ body {
   border: none;
   font-size: 1.25rem;
   color: #6b7280;
-  top: 1rem;  /* 上部内边距 */
-  right: 1rem;  /* 右侧内边距 */
+  top: 1rem; /* 上部内边距 */
+  right: 1rem; /* 右侧内边距 */
 }
 
 .close-button i {
-  font-size: 1.5rem;  /* 增大关闭按钮图标的大小 */
-  color: #6b7280;  /* 确保图标的颜色 */
+  font-size: 1.5rem; /* 增大关闭按钮图标的大小 */
+  color: #6b7280; /* 确保图标的颜色 */
 }
 
 .close-button:hover {
-  color: #f87171;  /* 鼠标悬停时颜色变化 */
+  color: #f87171; /* 鼠标悬停时颜色变化 */
 }
 
 /* 滚动容器的样式 */

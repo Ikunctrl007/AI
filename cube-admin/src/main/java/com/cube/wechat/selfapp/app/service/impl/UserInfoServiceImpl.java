@@ -323,6 +323,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (!isValidInput(wcOfficeAccount.getAppId(), wcOfficeAccount.getAppSecret(), wcOfficeAccount.getOfficeAccountName())) {
             return ResultBody.error(201, "绑定失败：参数不能为空");
         }
+        System.out.println(wcOfficeAccount);
         try {
             if (wcOfficeAccount.getPicUrl() != null){
                 // 1. 下载图片到本地临时文件

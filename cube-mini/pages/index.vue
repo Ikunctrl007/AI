@@ -117,6 +117,14 @@
 						title: 'DeepSeek',
 						description: 'DeepSeek原生AI助手，擅长深度思考和联网搜索',
 						type: 'doubao'
+					},
+					{
+						name: 'MiniMax@元器',
+						avatar: 'https://k.sinaimg.cn/n/sinakd20240307s/606/w900h506/20240307/6ff8-948f6f0fbced26529c4c270d566c463c.png/w700d1q75cms.jpg?by=cms_fixed_width',
+						icon: 'https://u3w.com/chatfile/Deepseek.png',
+						title: 'MiniMax@元器',
+						description: 'MiniMax@元器AI助手，提供专业、严谨的解答。',
+						type: 'mini'
 					}
 				],
 				advantages: [

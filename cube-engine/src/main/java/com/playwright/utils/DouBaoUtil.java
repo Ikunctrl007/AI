@@ -163,6 +163,7 @@ public class DouBaoUtil {
      */
     public String waitPBCopy(Page page,String userId,String aiName)  {
         try {
+
             // 等待聊天框的内容稳定
             String currentContent = "";
             String lastContent = "";

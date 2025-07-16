@@ -36,6 +36,8 @@ public class UserInfoRequest {
 
     @Schema(description = "数据库大模型（如 ZJ-DB）的聊天会话 ID", example = "db_chat_003")
     private String dbChatId;
+    @Schema(description = "MiniMax的聊天会话 ID", example = "mini_chat_003")
+    private String maxChatId;
 
     @Schema(description = "数据库大模型（如 qwen）的聊天会话 ID", example = "qw_chat_003")
     private String qwChatId;

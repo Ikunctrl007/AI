@@ -485,19 +485,22 @@
 					yuanbao: false,
 					doubao: false,
 					agent: false,
-          deepseek: false // DeepSeek初始为未登录状态
+          deepseek: false ,// DeepSeek初始为未登录状态
+		  mini:false
 				},
 				accounts: {
 					yuanbao: '',
 					doubao: '',
 					agent: '',
-          deepseek: ''
+          deepseek: '',
+		  mini:''
 				},
 				isLoading: {
 					yuanbao: true,
 					doubao: true,
 					agent: true,
-          deepseek: true // DeepSeek初始为加载状态
+          deepseek: true, // DeepSeek初始为加载状态
+		  mini:true
 				}
 			};
 		},
@@ -511,7 +514,7 @@
 				const hasAvailableAI = this.aiList.some(ai => ai.enabled && this.isAiLoginEnabled(ai));
 
 				// 检查是否正在加载AI状态（如果正在加载，禁用发送按钮）
-				const isCheckingStatus = this.isLoading.yuanbao || this.isLoading.doubao || this.isLoading.agent || this.isLoading.deepseek;
+				const isCheckingStatus = this.isLoading.yuanbao || this.isLoading.doubao || this.isLoading.agent || this.isLoading.deepseek || this.isLoading.mini;
 
 				return hasInput && hasAvailableAI && !isCheckingStatus;
 			},
@@ -734,6 +737,16 @@
 							this.userInfoReq.roles = this.userInfoReq.roles + 'zj-db-sdsk,';
 						}
 					}
+					        if (ai.name === "MiniMax@元器") {
+					          this.userInfoReq.roles =
+					            this.userInfoReq.roles + "mini-max-agent,";
+					          if (ai.selectedCapabilities.includes("deep_thinking")) {
+					            this.userInfoReq.roles = this.userInfoReq.roles + "max-sdsk,";
+					          }
+					          if (ai.selectedCapabilities.includes("web_search")) {
+					            this.userInfoReq.roles = this.userInfoReq.roles + "max-lwss,";
+					          }
+					        }
 				});
 
 				console.log("参数：", this.userInfoReq);
@@ -783,7 +796,7 @@
 			this.isConnecting = true;
 
 			// 使用PC端的WebSocket连接方式
-			const wsUrl = `${process.env.VUE_APP_WS_API || 'wss://u3w.com/cubeServer/websocket?clientId='}mypc-${this.userId}`;
+			const wsUrl = `${process.env.VUE_APP_WS_API || 'ws://127.0.0.1:8081/websocket?clientId='}mypc-${this.userId}`;
 			// const wsUrl = `${process.env.VUE_APP_WS_API || 'ws://127.0.0.1:8081/websocket?clientId='}mypc-${this.userId}`;
 			console.log('WebSocket URL:', wsUrl);
 
@@ -951,7 +964,9 @@
 						this.userInfoReq.ybDsChatId = dataObj.chatId;
 					} else if (dataObj.type === 'RETURN_DB_CHATID' && dataObj.chatId) {
 						this.userInfoReq.dbChatId = dataObj.chatId;
-					}
+					}else if (dataObj.type === "RETURN_MAX_CHATID" && dataObj.chatId) {
+        this.userInfoReq.maxChatId = dataObj.chatId;
+      }
 
 					// 处理进度日志消息
 					if (dataObj.type === 'RETURN_PC_TASK_LOG' && dataObj.aiName) {
@@ -1064,6 +1079,20 @@
 					// 更新AI启用状态
 					this.updateAiEnabledStatus();
 				}
+				// 处理MiniMax@元器登录状态
+				else if (datastr.includes("RETURN_MAX_STATUS") && dataObj.status != '') {
+					this.isLoading.mini = false;
+					if (!datastr.includes("false")) {
+						this.aiLoginStatus.mini = true;
+						this.accounts.mini = dataObj.status;
+					} else {
+						this.aiLoginStatus.mini = false;
+						// 禁用相关AI
+						this.disableAIsByLoginStatus('mini');
+					}
+					// 更新AI启用状态
+					this.updateAiEnabledStatus();
+				}
         // 处理DeepSeek登录状态
         else if (datastr.includes("RETURN_DEEPSEEK_STATUS")) {
           console.log("收到DeepSeek登录状态消息:", dataObj);
@@ -1129,6 +1158,10 @@
 						console.log('收到消息:', dataObj);
 						targetAI = this.enabledAIs.find(ai => ai.name === '数智化助手@元器');
 						break;
+						case 'RETURN_MAX_RES':
+							console.log('收到消息:', dataObj);
+							targetAI = this.enabledAIs.find(ai => ai.name === 'MiniMax@元器');
+							break;
           case 'RETURN_DEEPSEEK_RES':
             console.log('收到DeepSeek消息:', dataObj);
             targetAI = this.enabledAIs.find(ai => ai.name === 'DeepSeek');
@@ -1463,6 +1496,7 @@
 					this.userInfoReq.toneChatId = item.toneChatId || '';
 					this.userInfoReq.ybDsChatId = item.ybDsChatId || '';
 					this.userInfoReq.dbChatId = item.dbChatId || '';
+					this.userInfoReq.maxChatId = item.maxChatId || '';
 					this.userInfoReq.isNewChat = false;
 
 					// 不再根据AI登录状态更新AI启用状态，保持原有选择
@@ -1511,7 +1545,8 @@
 					chatId: this.chatId,
 					toneChatId: this.userInfoReq.toneChatId,
 					ybDsChatId: this.userInfoReq.ybDsChatId,
-					dbChatId: this.userInfoReq.dbChatId
+					dbChatId: this.userInfoReq.dbChatId,
+					maxChatId: this.userInfoReq.maxChatId,
 				};
 
 				try {
@@ -1522,7 +1557,8 @@
 						chatId: this.chatId,
 						toneChatId: this.userInfoReq.toneChatId,
 						ybDsChatId: this.userInfoReq.ybDsChatId,
-						dbChatId: this.userInfoReq.dbChatId
+						dbChatId: this.userInfoReq.dbChatId,
+						maxChatId: this.userInfoReq.maxChatId,
 					});
 				} catch (error) {
 					console.error('保存历史记录失败:', error);
@@ -1933,6 +1969,7 @@
 					toneChatId: '',
 					ybDsChatId: '',
 					dbChatId: '',
+					maxChatId:'',
 					isNewChat: true
 				};
 				// 重置AI列表为初始状态
@@ -1992,6 +2029,7 @@
 						progressLogs: [],
 						isExpanded: true
 					},
+					
           {
             name: 'DeepSeek',
             avatar: 'https://communication.cn-nb1.rains3.com/Deepseek.png',
@@ -2022,7 +2060,19 @@
 						status: 'idle',
 						progressLogs: [],
 						isExpanded: true
-					}
+					},        {
+          name: "MiniMax@元器",
+          avatar: 'https://k.sinaimg.cn/n/sinakd20240307s/606/w900h506/20240307/6ff8-948f6f0fbced26529c4c270d566c463c.png/w700d1q75cms.jpg?by=cms_fixed_width',
+          capabilities: [
+            { label: "深度思考", value: "deep_thinking" },
+            { label: "联网搜索", value: "web_search" },
+          ],
+          selectedCapabilities: ['deep_thinking', 'web_search'],
+          enabled: true,
+          status: "idle",
+          progressLogs: [],
+          isExpanded: true,
+        }
 				];
 				// 不再根据AI登录状态更新AI启用状态，保持原有选择
 
@@ -2067,6 +2117,12 @@
 					userId: this.userId,
 					corpId: this.corpId
 				});
+				          // 检查MiniMax登录状态
+				          this.sendWebSocketMessage({
+				            type: "PLAY_CHECK_MAX_LOGIN",
+				            userId: this.userId,
+				            corpId: this.corpId,
+				          });
 
 
         // 检查DeepSeek登录状态
@@ -2105,7 +2161,8 @@
 					yuanbao: true,
 					doubao: true,
 					agent: true,
-          deepseek: true
+          deepseek: true,
+		  mini:true
 				};
 
 				// 重置登录状态
@@ -2113,7 +2170,8 @@
 					yuanbao: false,
 					doubao: false,
 					agent: false,
-          deepseek: false
+          deepseek: false,
+		  mini:false
 				};
 
 				// 重置账户信息
@@ -2121,7 +2179,8 @@
 					yuanbao: '',
 					doubao: '',
 					agent: '',
-          deepseek: ''
+          deepseek: '',
+		  mini:''
 				};
 
 				// 显示刷新提示
@@ -2153,6 +2212,8 @@
 						return this.aiLoginStatus.yuanbao; // 腾讯元宝登录状态
 					case '豆包':
 						return this.aiLoginStatus.doubao; // 豆包登录状态
+					case 'MiniMax@元器':
+						return this.aiLoginStatus.mini; // MiniMax@元器登录状态
           case 'DeepSeek':
             return this.aiLoginStatus.deepseek; // 使用实际的DeepSeek登录状态
 					default:
@@ -2171,6 +2232,8 @@
 						return this.isLoading.yuanbao;
 					case '豆包':
 						return this.isLoading.doubao;
+						case 'MiniMax@元器':
+							return this.isLoading.mini;
           case 'DeepSeek':
             return this.isLoading.deepseek; // 使用实际的DeepSeek加载状态
 					default:

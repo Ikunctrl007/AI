@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-
-<!--    <panel-group @handleSetLineChartData="handleSetLineChartData" />-->
+    <!--    <panel-group @handleSetLineChartData="handleSetLineChartData" />-->
     <div class="app-container">
       <el-row :gutter="30">
         <el-col :span="6" :xs="30">
@@ -16,7 +15,9 @@
               <ul class="list-group list-group-striped">
                 <li class="list-group-item">
                   <svg-icon icon-class="user" />用户名称
-                  <div class="pull-right" id="userName">{{ user.nickName }}</div>
+                  <div class="pull-right" id="userName">
+                    {{ user.nickName }}
+                  </div>
                 </li>
                 <li class="list-group-item">
                   <svg-icon icon-class="phone" />手机号码
@@ -29,70 +30,190 @@
                 <li class="list-group-item">
                   <svg-icon icon-class="user" />
                   <span>积分余额</span>
-                  <div  :style="{ color: user.points >= 0 ? 'green' : 'red' }" class="pull-right">{{ user.points }}</div>
-                  <el-tooltip content="点击可查看积分明细" placement="top" effect="light">
-                    <i class="el-icon-chat-dot-round" @click="showPointsDetail"></i>
+                  <div
+                    :style="{ color: user.points >= 0 ? 'green' : 'red' }"
+                    class="pull-right"
+                  >
+                    {{ user.points }}
+                  </div>
+                  <el-tooltip
+                    content="点击可查看积分明细"
+                    placement="top"
+                    effect="light"
+                  >
+                    <i
+                      class="el-icon-chat-dot-round"
+                      @click="showPointsDetail"
+                    ></i>
                   </el-tooltip>
                 </li>
                 <li class="list-group-item">
-                  <el-button type="primary" size="mini" @click="handleBindWechat">绑定公众号</el-button>
-                  <el-button type="primary" size="mini" @click="handleAgentBind">Agent API设置</el-button>
-                  <el-button type="primary" size="mini" @click="handleSpaceBind">元器空间绑定</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleBindWechat"
+                    >绑定公众号</el-button
+                  >
+                  <el-button type="primary" size="mini" @click="handleAgentBind"
+                    >Agent API设置</el-button
+                  >
+                  <el-button type="primary" size="mini" @click="handleSpaceBind"
+                    >元器空间绑定</el-button
+                  >
 
-
-                  <el-dialog title="公众号智能体API配置" :visible.sync="dialogAgentFormVisible">
-                    <el-form :model="agentForm" :rules="agentrules" ref="agentForm" >
-                      <el-form-item label="智能体ID" :label-width="formLabelWidth" prop="agentId">
-                        <el-input v-model="agentForm.agentId" maxlength="32"  placeholder="请输入agentId" autocomplete="off"></el-input>
+                  <el-dialog
+                    title="公众号智能体API配置"
+                    :visible.sync="dialogAgentFormVisible"
+                  >
+                    <el-form
+                      :model="agentForm"
+                      :rules="agentrules"
+                      ref="agentForm"
+                    >
+                      <el-form-item
+                        label="智能体ID"
+                        :label-width="formLabelWidth"
+                        prop="agentId"
+                      >
+                        <el-input
+                          v-model="agentForm.agentId"
+                          maxlength="32"
+                          placeholder="请输入agentId"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
-                      <el-form-item label="智能体Token" :label-width="formLabelWidth" prop="agentToken">
-                        <el-input v-model="agentForm.agentToken" maxlength="50"  placeholder="请输入agentToken" autocomplete="off"></el-input>
+                      <el-form-item
+                        label="智能体Token"
+                        :label-width="formLabelWidth"
+                        prop="agentToken"
+                      >
+                        <el-input
+                          v-model="agentForm.agentToken"
+                          maxlength="50"
+                          placeholder="请输入agentToken"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                      <el-button @click="dialogAgentFormVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="confirmAgentBind">确 定</el-button>
+                      <el-button @click="dialogAgentFormVisible = false"
+                        >取 消</el-button
+                      >
+                      <el-button type="primary" @click="confirmAgentBind"
+                        >确 定</el-button
+                      >
                     </div>
                   </el-dialog>
 
-                  <el-dialog title="元器空间绑定" :visible.sync="dialogSpaceFormVisible">
-                    <el-form :model="spaceForm" :rules="spacerules" ref="spaceForm" >
-                      <el-form-item label="空间ID" :label-width="formLabelWidth" prop="spaceId">
-                        <el-input v-model="spaceForm.spaceId" maxlength="32"  placeholder="请输入空间ID" autocomplete="off"></el-input>
+                  <el-dialog
+                    title="元器空间绑定"
+                    :visible.sync="dialogSpaceFormVisible"
+                  >
+                    <el-form
+                      :model="spaceForm"
+                      :rules="spacerules"
+                      ref="spaceForm"
+                    >
+                      <el-form-item
+                        label="空间ID"
+                        :label-width="formLabelWidth"
+                        prop="spaceId"
+                      >
+                        <el-input
+                          v-model="spaceForm.spaceId"
+                          maxlength="32"
+                          placeholder="请输入空间ID"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
-                      <el-form-item label="空间名称" :label-width="formLabelWidth" prop="spaceName">
-                        <el-input v-model="spaceForm.spaceName" maxlength="50"  placeholder="请输入空间名称" autocomplete="off"></el-input>
+                      <el-form-item
+                        label="空间名称"
+                        :label-width="formLabelWidth"
+                        prop="spaceName"
+                      >
+                        <el-input
+                          v-model="spaceForm.spaceName"
+                          maxlength="50"
+                          placeholder="请输入空间名称"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                      <el-button @click="dialogSpaceFormVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="confirmSpaceBind">确 定</el-button>
+                      <el-button @click="dialogSpaceFormVisible = false"
+                        >取 消</el-button
+                      >
+                      <el-button type="primary" @click="confirmSpaceBind"
+                        >确 定</el-button
+                      >
                     </div>
                   </el-dialog>
 
-                  <el-dialog title="绑定微信公众号" :visible.sync="dialogFormVisible">
-                    <el-form :model="form" :rules="rules" ref="form" >
-                      <el-form-item label="appId" :label-width="formLabelWidth" prop="appId">
-                        <el-input v-model="form.appId" maxlength="32"  placeholder="请输入appId" autocomplete="off"></el-input>
+                  <el-dialog
+                    title="绑定微信公众号"
+                    :visible.sync="dialogFormVisible"
+                  >
+                    <el-form :model="form" :rules="rules" ref="form">
+                      <el-form-item
+                        label="appId"
+                        :label-width="formLabelWidth"
+                        prop="appId"
+                      >
+                        <el-input
+                          v-model="form.appId"
+                          maxlength="32"
+                          placeholder="请输入appId"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
-                      <el-form-item label="appSecret" :label-width="formLabelWidth" prop="appSecret">
-                        <el-input v-model="form.appSecret" maxlength="50"  placeholder="请输入appSecret" autocomplete="off"></el-input>
+                      <el-form-item
+                        label="appSecret"
+                        :label-width="formLabelWidth"
+                        prop="appSecret"
+                      >
+                        <el-input
+                          v-model="form.appSecret"
+                          maxlength="50"
+                          placeholder="请输入appSecret"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
-                      <el-form-item label="公众号名称" :label-width="formLabelWidth" prop="officeAccountName">
-                        <el-input v-model="form.officeAccountName" maxlength="50"  placeholder="请输入公众号名称" autocomplete="off"></el-input>
+                      <el-form-item
+                        label="公众号名称"
+                        :label-width="formLabelWidth"
+                        prop="officeAccountName"
+                      >
+                        <el-input
+                          v-model="form.officeAccountName"
+                          maxlength="50"
+                          placeholder="请输入公众号名称"
+                          autocomplete="off"
+                        ></el-input>
                       </el-form-item>
-                      <el-form-item label="素材封面图" :label-width="formLabelWidth" prop="picUrl">
-                        <image-upload v-model="form.picUrl"/>
+                      <el-form-item
+                        label="素材封面图"
+                        :label-width="formLabelWidth"
+                        prop="picUrl"
+                      >
+                        <image-upload v-model="form.picUrl" />
                       </el-form-item>
-                      <el-form-item label="规范说明" :label-width="formLabelWidth">
-                        <div style="color: #f56c6c; font-size: 13px;">
-                          请把IP: 175.178.154.216 添加到公众号IP白名单。步骤：登录微信公众平台→点击设置与开发→安全中心→IP白名单。一般一小时后生效。
+                      <el-form-item
+                        label="规范说明"
+                        :label-width="formLabelWidth"
+                      >
+                        <div style="color: #f56c6c; font-size: 13px">
+                          请把IP: 175.178.154.216
+                          添加到公众号IP白名单。步骤：登录微信公众平台→点击设置与开发→安全中心→IP白名单。一般一小时后生效。
                         </div>
                       </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                      <el-button @click="dialogFormVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="confirmBind">确 定</el-button>
+                      <el-button @click="dialogFormVisible = false"
+                        >取 消</el-button
+                      >
+                      <el-button type="primary" @click="confirmBind"
+                        >确 定</el-button
+                      >
                     </div>
                   </el-dialog>
                 </li>
@@ -108,7 +229,7 @@
                 AI 登录状态
               </span>
               <el-button
-                style="float: right; margin-top: -30px;"
+                style="float: right; margin-top: -30px"
                 type="text"
                 @click="handleRefresh"
               >
@@ -116,86 +237,159 @@
               </el-button>
             </div>
             <div class="ai-status-list">
-              <div class="ai-status-item" v-for="(status, type) in aiLoginStatus" :key="type">
+              <div
+                class="ai-status-item"
+                v-for="(status, type) in aiLoginStatus"
+                :key="type"
+              >
                 <div class="ai-platform">
                   <div class="platform-icon">
-                    <img :src="getPlatformIcon(type)" :alt="getPlatformName(type)" />
+                    <img
+                      :src="getPlatformIcon(type)"
+                      :alt="getPlatformName(type)"
+                    />
                   </div>
                   <div class="platform-name">
                     {{ getPlatformName(type) }}
-                    <el-tooltip v-if="isLoading[type]" content="正在登录中..." placement="top">
+                    <el-tooltip
+                      v-if="isLoading[type]"
+                      content="正在登录中..."
+                      placement="top"
+                    >
                       <i class="el-icon-loading loading-icon"></i>
                     </el-tooltip>
                   </div>
                 </div>
                 <div class="status-action">
-                  <el-tag v-if="status" type="success" effect="dark" class="status-tag">
-                    <i class="el-icon-success"></i> <span>{{ accounts[type] }}</span>
+                  <el-tag
+                    v-if="status"
+                    type="success"
+                    effect="dark"
+                    class="status-tag"
+                  >
+                    <i class="el-icon-success"></i>
+                    <span>{{ accounts[type] }}</span>
                   </el-tag>
-                  <el-button v-else type="primary" size="small" :disabled="!isClick[type]" @click="handleAiLogin(type)" class="login-btn">
+                  <el-button
+                    v-else
+                    type="primary"
+                    size="small"
+                    :disabled="!isClick[type]"
+                    @click="handleAiLogin(type)"
+                    class="login-btn"
+                  >
                     <i class="el-icon-connection"></i> 点击登录
                   </el-button>
                 </div>
               </div>
             </div>
           </el-card>
-
-
-
         </el-col>
       </el-row>
     </div>
 
     <!-- AI登录二维码对话框 -->
-    <el-dialog :title="getAiLoginTitle" :visible.sync="aiLoginDialogVisible" width="1200px" height="800px" center>
+    <el-dialog
+      :title="getAiLoginTitle"
+      :visible.sync="aiLoginDialogVisible"
+      width="1200px"
+      height="800px"
+      center
+    >
       <div class="qr-code-container" v-loading="!qrCodeUrl">
         <div v-if="qrCodeUrl" class="qr-code">
-          <img style="width: 100%;height: 100%;" :src="qrCodeUrl" alt="登录二维码" />
+          <img
+            style="width: 100%; height: 100%"
+            :src="qrCodeUrl"
+            alt="登录二维码"
+          />
           <p class="qr-tip">请使用对应AI平台APP扫码登录</p>
         </div>
-        <div v-else class="loading-tip">
-          正在获取登录二维码...
-        </div>
+        <div v-else class="loading-tip">正在获取登录二维码...</div>
       </div>
     </el-dialog>
 
-    <el-dialog title="积分详细" :visible.sync="openPointsRecord" width="1000px" append-to-body>
-        <el-select
-          v-model="queryPointForm.type"
-          placeholder="积分类型"
-          clearable
-          style="width: 240px;margin-bottom: 10px"
-          @change="getUserPointsRecord"
+    <el-dialog
+      title="积分详细"
+      :visible.sync="openPointsRecord"
+      width="1000px"
+      append-to-body
+    >
+      <el-select
+        v-model="queryPointForm.type"
+        placeholder="积分类型"
+        clearable
+        style="width: 240px; margin-bottom: 10px"
+        @change="getUserPointsRecord"
+      >
+        <el-option
+          v-for="dict in changeType"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
+        />
+      </el-select>
+      <el-table v-loading="loading" :data="pointsRecordList">
+        <el-table-column
+          label="用户昵称"
+          align="center"
+          key="nick_name"
+          prop="nick_name"
+          :show-overflow-tooltip="true"
+        />
+        <el-table-column
+          label="变更数量"
+          align="center"
+          key="change_amount"
+          prop="change_amount"
+          :show-overflow-tooltip="true"
         >
-          <el-option
-            v-for="dict in changeType"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      <el-table  v-loading="loading" :data="pointsRecordList">
-        <el-table-column label="用户昵称" align="center" key="nick_name" prop="nick_name"  :show-overflow-tooltip="true" />
-        <el-table-column label="变更数量" align="center" key="change_amount" prop="change_amount" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-                <span :style="{ color: scope.row.change_amount >= 0 ? 'green' : 'red' }">
-                  {{ scope.row.change_amount }}
-                </span>
+            <span
+              :style="{ color: scope.row.change_amount >= 0 ? 'green' : 'red' }"
+            >
+              {{ scope.row.change_amount }}
+            </span>
           </template>
         </el-table-column>
-        <el-table-column label="积分余额" align="center" key="balance_after" prop="balance_after" :show-overflow-tooltip="true" />
-        <el-table-column label="变更类型" align="center" key="change_type" prop="change_type"   />
-        <el-table-column  width="200" label="变更时间" align="center" prop="create_time" >
+        <el-table-column
+          label="积分余额"
+          align="center"
+          key="balance_after"
+          prop="balance_after"
+          :show-overflow-tooltip="true"
+        />
+        <el-table-column
+          label="变更类型"
+          align="center"
+          key="change_type"
+          prop="change_type"
+        />
+        <el-table-column
+          width="200"
+          label="变更时间"
+          align="center"
+          prop="create_time"
+        >
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.create_time) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作人" align="center" key="create_name" prop="create_name"   />
-        <el-table-column label="备注" align="center" key="remark" prop="remark"   />
-
+        <el-table-column
+          label="操作人"
+          align="center"
+          key="create_name"
+          prop="create_name"
+        />
+        <el-table-column
+          label="备注"
+          align="center"
+          key="remark"
+          prop="remark"
+        />
       </el-table>
       <pagination
-        v-show="pointtotal>0"
+        v-show="pointtotal > 0"
         :total="pointtotal"
         :page.sync="queryPointForm.page"
         :limit.sync="queryPointForm.limit"
@@ -203,49 +397,59 @@
       />
     </el-dialog>
   </div>
-
 </template>
 
 <script>
-import PanelGroup from './dashboard/PanelGroup'
-import LineChart from './dashboard/LineChart'
-import RaddarChart from './dashboard/RaddarChart'
-import PieChart from './dashboard/PieChart'
-import BarChart from './dashboard/BarChart'
+import PanelGroup from "./dashboard/PanelGroup";
+import LineChart from "./dashboard/LineChart";
+import RaddarChart from "./dashboard/RaddarChart";
+import PieChart from "./dashboard/PieChart";
+import BarChart from "./dashboard/BarChart";
 import userAvatar from "@/views/system/user/profile/userAvatar";
 import userInfo from "@/views/system/user/profile/userInfo";
 import resetPwd from "@/views/system/user/profile/resetPwd";
-import {getUserProfile, bindWcOfficeAccount, getOfficeAccount, getAgentBind, saveAgentBind, saveSpaceBind, getSpaceInfoByUserId} from "@/api/system/user";
-import {getUserPointsRecord } from "@/api/wechat/company";
-import websocketClient from '@/utils/websocket';
+import {
+  getUserProfile,
+  bindWcOfficeAccount,
+  getOfficeAccount,
+  getAgentBind,
+  saveAgentBind,
+  saveSpaceBind,
+  getSpaceInfoByUserId,
+} from "@/api/system/user";
+import { getUserPointsRecord } from "@/api/wechat/company";
+import websocketClient from "@/utils/websocket";
 
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+    actualData: [120, 82, 91, 154, 162, 140, 145],
   },
   messages: {
     expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
+    actualData: [180, 160, 151, 106, 145, 150, 130],
   },
   purchases: {
     expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
+    actualData: [120, 90, 100, 138, 142, 130, 130],
   },
   shoppings: {
     expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+    actualData: [120, 82, 91, 154, 162, 140, 130],
+  },
+};
 
 export default {
-  name: 'Index',
+  name: "Index",
   components: {
     PanelGroup,
     LineChart,
     RaddarChart,
     PieChart,
-    BarChart,userAvatar, userInfo, resetPwd
+    BarChart,
+    userAvatar,
+    userInfo,
+    resetPwd,
   },
   data() {
     return {
@@ -259,77 +463,73 @@ export default {
       dialogAgentFormVisible: false, // 绑定智能体弹窗
       dialogSpaceFormVisible: false, // 绑定元器空间弹窗
       form: {
-        appId: '', // 公众号appId
-        appSecret: '', // 公众号appSecret
-        officeAccountName: '', // 公众号名称
-        picUrl: '', // 公众号封面图
+        appId: "", // 公众号appId
+        appSecret: "", // 公众号appSecret
+        officeAccountName: "", // 公众号名称
+        picUrl: "", // 公众号封面图
       },
       agentForm: {
-        agentId: '', // 智能体ID
-        agentToken: '', // 智能体token
+        agentId: "", // 智能体ID
+        agentToken: "", // 智能体token
       },
       spaceForm: {
-        spaceId: '', // 空间ID
-        spaceName: '', // 空间名称
+        spaceId: "", // 空间ID
+        spaceName: "", // 空间名称
       },
-      formLabelWidth: '120px', //输入框宽度
+      formLabelWidth: "120px", //输入框宽度
       // 绑定公众号表单验证规则
       rules: {
-        appId: [
-          { required: true, message: '请输入appId', trigger: 'blur' }
-        ],
+        appId: [{ required: true, message: "请输入appId", trigger: "blur" }],
         appSecret: [
-          { required: true, message: '请输入appSecret', trigger: 'blur' }
+          { required: true, message: "请输入appSecret", trigger: "blur" },
         ],
         officeAccountName: [
-          { required: false, message: '请输入公众号名称', trigger: 'blur' }
-        ]
+          { required: false, message: "请输入公众号名称", trigger: "blur" },
+        ],
       },
       agentrules: {
         agentId: [
-          { required: true, message: '请输入agentId', trigger: 'blur' }
+          { required: true, message: "请输入agentId", trigger: "blur" },
         ],
         agentToken: [
-          { required: true, message: '请输入agentToken', trigger: 'blur' }
-        ]
+          { required: true, message: "请输入agentToken", trigger: "blur" },
+        ],
       },
       spacerules: {
-        spaceId: [
-          { required: true, message: '请输入空间ID', trigger: 'blur' }
-        ],
+        spaceId: [{ required: true, message: "请输入空间ID", trigger: "blur" }],
         spaceName: [
-          { required: true, message: '请输入空间名称', trigger: 'blur' }
-        ]
+          { required: true, message: "请输入空间名称", trigger: "blur" },
+        ],
       },
 
       //------ 积分相关变量 ------//
       loading: true, // 遮罩层
-      changeType:[
+      changeType: [
         {
-          label:"全部",
-          value:"0"
+          label: "全部",
+          value: "0",
         },
         {
-        label:"增加",
-        value:"1"
-      },
-        {
-          label:"消耗",
-          value:"2"
+          label: "增加",
+          value: "1",
         },
-      ],  // 积分明细表中的积分类型
+        {
+          label: "消耗",
+          value: "2",
+        },
+      ], // 积分明细表中的积分类型
       openPointsRecord: false, // 积分明细弹窗
       pointtotal: 0, // 积分明细总数
-      queryPointForm:{
-        limit:10,
-        page:1,
-        type:'',
-        userId:''
+      queryPointForm: {
+        limit: 10,
+        page: 1,
+        type: "",
+        userId: "",
       }, // 积分明细查询需要的查询参数
       pointsRecordList: null, // 积分明细列表
 
       //------ 签到相关变量 ------//
-      weekDays: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+      weekDays: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
       currentYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth() + 1,
       continuousSignInDays: 7,
@@ -337,55 +537,59 @@ export default {
       totalSignInDays: 128,
       todaySignedIn: false,
       signInHistory: [
-        { date: '2024-01-15', time: '08:30:25' },
-        { date: '2024-01-14', time: '09:15:33' },
-        { date: '2024-01-13', time: '07:45:12' },
-        { date: '2024-01-12', time: '08:20:45' },
-        { date: '2024-01-11', time: '09:00:18' }
+        { date: "2024-01-15", time: "08:30:25" },
+        { date: "2024-01-14", time: "09:15:33" },
+        { date: "2024-01-13", time: "07:45:12" },
+        { date: "2024-01-12", time: "08:20:45" },
+        { date: "2024-01-11", time: "09:00:18" },
       ],
       signedDates: [
         new Date(2024, 0, 1),
         new Date(2024, 0, 2),
         new Date(2024, 0, 3),
         new Date(2024, 0, 4),
-        new Date(2024, 0, 5)
+        new Date(2024, 0, 5),
       ],
       aiLoginStatus: {
         yuanbao: false,
         doubao: false,
         agent: false,
-        deepseek: false
+        deepseek: false,
+        minimax: false,
         // qw: false
       },
       accounts: {
-        yuanbao: '',
-        doubao: '',
-        agent: '',
-        deepseek: '',
+        yuanbao: "",
+        doubao: "",
+        agent: "",
+        deepseek: "",
+        minimax: "",
         // qw: ''
       },
       isClick: {
         yuanbao: false,
         doubao: false,
         agent: false,
-        deepseek: false
+        deepseek: false,
+        minimax: false,
         // qw: false
       },
       aiLoginDialogVisible: false,
-      currentAiType: '',
-      qrCodeUrl: '',
+      currentAiType: "",
+      qrCodeUrl: "",
       // 消息相关变量
       messages: [],
-      messageInput: '',
+      messageInput: "",
       isLoading: {
         yuanbao: true,
         doubao: true,
         wenxin: true,
         agent: true,
-        deepseek: true
+        deepseek: true,
+        minimax: true,
         // qw: true
       },
-    }
+    };
   },
   // 计算当前月份的签到日期
   computed: {
@@ -408,26 +612,26 @@ export default {
     },
     getAiLoginTitle() {
       const titles = {
-        yuanbao: '腾讯元宝登录',
-        doubao: '豆包登录',
-        agent: '智能体登录',
-        deepseek: 'DeepSeek登录',
+        yuanbao: "腾讯元宝登录",
+        doubao: "豆包登录",
+        agent: "智能体登录",
+        deepseek: "DeepSeek登录",
+        minimax: "MiniMax登录",
         // qw: '通义千问登录'
       };
-      return titles[this.currentAiType] || '登录';
-    }
+      return titles[this.currentAiType] || "登录";
+    },
   },
 
   created() {
     this.getUser();
-
   },
   methods: {
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.lineChartData = lineChartData[type];
     },
     getUser() {
-      getUserProfile().then(response => {
+      getUserProfile().then((response) => {
         this.user = response.data;
         this.roleGroup = response.roleGroup;
         this.postGroup = response.postGroup;
@@ -437,29 +641,35 @@ export default {
         this.initWebSocket(this.userId); // 创建时建立连接
 
         setTimeout(() => {
+          // 检查MiniMax登录状态
+          this.sendMessage({
+            type: "PLAY_CHECK_MAX_LOGIN",
+            userId: this.userId,
+            corpId: this.corpId,
+          });
           // 检查元宝登录状态
           this.sendMessage({
-            type: 'PLAY_CHECK_YB_LOGIN',
+            type: "PLAY_CHECK_YB_LOGIN",
             userId: this.userId,
-            corpId: this.corpId
+            corpId: this.corpId,
           });
 
           // 检查豆包登录状态
           this.sendMessage({
-            type: 'PLAY_CHECK_DB_LOGIN',
+            type: "PLAY_CHECK_DB_LOGIN",
             userId: this.userId,
-            corpId: this.corpId
+            corpId: this.corpId,
           });
           this.sendMessage({
-            type: 'PLAY_CHECK_AGENT_LOGIN',
+            type: "PLAY_CHECK_AGENT_LOGIN",
             userId: this.userId,
-            corpId: this.corpId
+            corpId: this.corpId,
           });
           // 检查DeepSeek登录状态
           this.sendMessage({
-            type: 'PLAY_CHECK_DEEPSEEK_LOGIN',
+            type: "PLAY_CHECK_DEEPSEEK_LOGIN",
             userId: this.userId,
-            corpId: this.corpId
+            corpId: this.corpId,
           });
           // 检查通义千问登录状态
           // this.sendMessage({
@@ -472,7 +682,7 @@ export default {
     },
     // 获取公众号信息
     handleBindWechat() {
-      getOfficeAccount().then(response => {
+      getOfficeAccount().then((response) => {
         if (response.data != null) {
           this.form.appId = response.data.appId;
           this.form.appSecret = response.data.appSecret;
@@ -483,7 +693,7 @@ export default {
       });
     },
     handleAgentBind() {
-      getAgentBind().then(response => {
+      getAgentBind().then((response) => {
         if (response.data != null) {
           this.agentForm.agentId = response.data.agent_id;
           this.agentForm.agentToken = response.data.agent_token;
@@ -492,7 +702,7 @@ export default {
       });
     },
     handleSpaceBind() {
-      getSpaceInfoByUserId().then(response => {
+      getSpaceInfoByUserId().then((response) => {
         if (response.data != null) {
           this.spaceForm.spaceId = response.data.spaceId;
           this.spaceForm.spaceName = response.data.spaceName;
@@ -502,13 +712,16 @@ export default {
     },
     // 绑定公众号
     confirmBind() {
+      console.log(11);
       this.$refs.form.validate((valid) => {
+        console.log("表单", this.form);
         if (valid) {
           // 表单验证通过，继续提交
-          bindWcOfficeAccount(this.form).then(response => {
+          bindWcOfficeAccount(this.form).then((response) => {
+            console.log(response.data);
             this.$message.success(response.data);
             this.dialogFormVisible = false;
-          })
+          });
         } else {
           // 表单验证失败
           return false;
@@ -520,10 +733,10 @@ export default {
       this.$refs.agentForm.validate((valid) => {
         if (valid) {
           // 表单验证通过，继续提交
-          saveAgentBind(this.agentForm).then(response => {
+          saveAgentBind(this.agentForm).then((response) => {
             this.$message.success(response.data);
             this.dialogAgentFormVisible = false;
-          })
+          });
         } else {
           // 表单验证失败
           return false;
@@ -534,10 +747,10 @@ export default {
       this.$refs.spaceForm.validate((valid) => {
         if (valid) {
           // 表单验证通过，继续提交
-          saveSpaceBind(this.spaceForm).then(response => {
+          saveSpaceBind(this.spaceForm).then((response) => {
             this.$message.success(response.data);
             this.dialogSpaceFormVisible = false;
-          })
+          });
         } else {
           // 表单验证失败
           return false;
@@ -546,33 +759,36 @@ export default {
     },
     // 获取当前登录用户积分明细
     showPointsDetail() {
-      this.queryPointForm.userId = this.user.userId
+      this.queryPointForm.userId = this.user.userId;
       this.getUserPointsRecord();
     },
     // 获取积分明细
-    getUserPointsRecord(){
-      getUserPointsRecord(this.queryPointForm).then(response => {
+    getUserPointsRecord() {
+      getUserPointsRecord(this.queryPointForm).then((response) => {
         this.openPointsRecord = true;
         this.pointsRecordList = response.data.list;
-        this.pointtotal = response.data.total
+        this.pointtotal = response.data.total;
         this.loading = false;
       });
     },
     // 获取当前月份的签到日期
     isSignedDate(date) {
       if (!date) return false;
-      return this.signedDates.some(signedDate =>
-        signedDate.getDate() === date.getDate() &&
-        signedDate.getMonth() === date.getMonth() &&
-        signedDate.getFullYear() === date.getFullYear()
+      return this.signedDates.some(
+        (signedDate) =>
+          signedDate.getDate() === date.getDate() &&
+          signedDate.getMonth() === date.getMonth() &&
+          signedDate.getFullYear() === date.getFullYear()
       );
     },
     isToday(date) {
       if (!date) return false;
       const today = new Date();
-      return date.getDate() === today.getDate() &&
-             date.getMonth() === today.getMonth() &&
-             date.getFullYear() === today.getFullYear();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
     },
     isFutureDate(date) {
       if (!date) return false;
@@ -586,8 +802,13 @@ export default {
         this.signedDates.push(new Date());
         const now = new Date();
         this.signInHistory.unshift({
-          date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
-          time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`
+          date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}-${String(now.getDate()).padStart(2, "0")}`,
+          time: `${String(now.getHours()).padStart(2, "0")}:${String(
+            now.getMinutes()
+          ).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`,
         });
         this.monthlySignInDays++;
         this.totalSignInDays++;
@@ -600,40 +821,47 @@ export default {
       this.getQrCode(type);
     },
     getQrCode(type) {
-      this.qrCodeUrl = ''
-      if(type == 'yuanbao'){
+      this.qrCodeUrl = "";
+      if (type == "yuanbao") {
         this.sendMessage({
-          type: 'PLAY_GET_YB_QRCODE',
+          type: "PLAY_GET_YB_QRCODE",
           userId: this.userId,
-          corpId: this.corpId
+          corpId: this.corpId,
         });
       }
-      if(type == 'doubao'){
+      if (type == "doubao") {
         this.sendMessage({
-          type: 'PLAY_GET_DB_QRCODE',
+          type: "PLAY_GET_DB_QRCODE",
           userId: this.userId,
-          corpId: this.corpId
+          corpId: this.corpId,
         });
       }
-      if(type == 'agent'){
+      if (type == "agent") {
         this.sendMessage({
-          type: 'PLAY_GET_AGENT_QRCODE',
+          type: "PLAY_GET_AGENT_QRCODE",
           userId: this.userId,
-          corpId: this.corpId
+          corpId: this.corpId,
         });
       }
-      if(type == 'deepseek'){
+      if (type == "deepseek") {
         this.sendMessage({
-          type: 'PLAY_GET_DEEPSEEK_QRCODE',
+          type: "PLAY_GET_DEEPSEEK_QRCODE",
           userId: this.userId,
-          corpId: this.corpId
+          corpId: this.corpId,
         });
       }
-      if(type == 'wenxin'){
+      if (type == "wenxin") {
         this.sendMessage({
-          type: 'PLAY_GET_WX_QRCODE',
+          type: "PLAY_GET_WX_QRCODE",
           userId: this.userId,
-          corpId: this.corpId
+          corpId: this.corpId,
+        });
+      }
+      if (type == "minimax") {
+        this.sendMessage({
+          type: "PLAY_GET_MAX_QRCODE",
+          userId: this.userId,
+          corpId: this.corpId,
         });
       }
       // if(type == 'qw'){
@@ -644,61 +872,62 @@ export default {
       //   });
       // }
       this.$message({
-        message: '正在获取登录二维码...',
-        type: 'info'
+        message: "正在获取登录二维码...",
+        type: "info",
       });
     },
     getPlatformIcon(type) {
       const icons = {
-        yuanbao: require('@/assets/logo/yuanbao.png'),
-        doubao: require('@/assets/logo/doubao.png'),
-        agent: require('@/assets/logo/yuanbao.png'),
-        deepseek: require('@/assets/logo/Deepseek.png'),
-        qw: require('@/assets/logo/qw.png')
+        yuanbao: require("@/assets/logo/yuanbao.png"),
+        doubao: require("@/assets/logo/doubao.png"),
+        agent: require("@/assets/logo/yuanbao.png"),
+        deepseek: require("@/assets/logo/Deepseek.png"),
+        minimax: require("@/assets/logo/MiniMax.png"),
+        qw: require("@/assets/logo/qw.png"),
       };
-      return icons[type] || '';
+      return icons[type] || "";
     },
     getPlatformName(type) {
       const names = {
-        yuanbao: '腾讯元宝',
-        doubao: '豆包',
-        agent: '智能体',
-        deepseek: 'DeepSeek',
+        yuanbao: "腾讯元宝",
+        doubao: "豆包",
+        agent: "智能体",
+        deepseek: "DeepSeek",
+        minimax: "MiniMax",
         // qw: '通义千问'
       };
-      return names[type] || '';
+      return names[type] || "";
     },
     // WebSocket 相关方法
     initWebSocket(id) {
       const wsUrl = process.env.VUE_APP_WS_API + `mypc-${id}`;
-      console.log('WebSocket URL:', process.env.VUE_APP_WS_API);
+      console.log("WebSocket URL:", process.env.VUE_APP_WS_API);
       websocketClient.connect(wsUrl, (event) => {
         switch (event.type) {
-          case 'open':
-            this.$message.success('正在获取最新登录状态，请稍后...');
+          case "open":
+            this.$message.success("正在获取最新登录状态，请稍后...");
             break;
-          case 'message':
+          case "message":
             this.handleWebSocketMessage(event.data);
             break;
-          case 'close':
-            this.$message.warning('WebSocket连接已关闭');
+          case "close":
+            this.$message.warning("WebSocket连接已关闭");
             break;
-          case 'error':
-            this.$message.error('WebSocket连接错误');
+          case "error":
+            this.$message.error("WebSocket连接错误");
             break;
-          case 'reconnect_failed':
-            this.$message.error('WebSocket重连失败，请刷新页面重试');
+          case "reconnect_failed":
+            this.$message.error("WebSocket重连失败，请刷新页面重试");
             break;
         }
       });
     },
 
     handleWebSocketMessage(data) {
-      console.log('收到消息:', data);
+      console.log("收到消息:", data);
       const datastr = data;
       const dataObj = JSON.parse(datastr);
-
-      if (datastr.includes("RETURN_YB_STATUS") && dataObj.status != '') {
+      if (datastr.includes("RETURN_YB_STATUS") && dataObj.status != "") {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.yuanbao = true;
@@ -708,7 +937,10 @@ export default {
           this.isClick.yuanbao = true;
           this.isLoading.yuanbao = false;
         }
-      } else if (datastr.includes("RETURN_AGENT_STATUS") && dataObj.status != '') {
+      } else if (
+        datastr.includes("RETURN_AGENT_STATUS") &&
+        dataObj.status != ""
+      ) {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.agent = true;
@@ -718,9 +950,17 @@ export default {
           this.isClick.agent = true;
           this.isLoading.agent = false;
         }
-      } else if (datastr.includes("RETURN_PC_YB_QRURL") || datastr.includes("RETURN_PC_DB_QRURL") || datastr.includes("RETURN_PC_WX_QRURL") || datastr.includes("RETURN_PC_AGENT_QRURL") || datastr.includes("RETURN_PC_DEEPSEEK_QRURL")|| datastr.includes("RETURN_PC_QW_QRURL")) {
+      } else if (
+        datastr.includes("RETURN_PC_YB_QRURL") ||
+        datastr.includes("RETURN_PC_DB_QRURL") ||
+        datastr.includes("RETURN_PC_WX_QRURL") ||
+        datastr.includes("RETURN_PC_AGENT_QRURL") ||
+        datastr.includes("RETURN_PC_DEEPSEEK_QRURL") ||
+        datastr.includes("RETURN_PC_QW_QRURL") ||
+        datastr.includes("RETURN_PC_MAX_QRURL")
+      ) {
         this.qrCodeUrl = dataObj.url;
-      } else if (datastr.includes("RETURN_DB_STATUS") && dataObj.status != '') {
+      } else if (datastr.includes("RETURN_DB_STATUS") && dataObj.status != "") {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.doubao = true;
@@ -730,7 +970,7 @@ export default {
           this.isClick.doubao = true;
           this.isLoading.doubao = false;
         }
-      } else if (datastr.includes("RETURN_WX_STATUS") && dataObj.status != '') {
+      } else if (datastr.includes("RETURN_WX_STATUS") && dataObj.status != "") {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.wenxin = true;
@@ -740,7 +980,10 @@ export default {
           this.isClick.wenxin = true;
           this.isLoading.wenxin = false;
         }
-      } else if (datastr.includes("RETURN_DEEPSEEK_STATUS") && dataObj.status != '') {
+      } else if (
+        datastr.includes("RETURN_DEEPSEEK_STATUS") &&
+        dataObj.status != ""
+      ) {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.deepseek = true;
@@ -750,7 +993,7 @@ export default {
           this.isClick.deepseek = true;
           this.isLoading.deepseek = false;
         }
-      } else if (datastr.includes("RETURN_QW_STATUS") && dataObj.status != '') {
+      } else if (datastr.includes("RETURN_QW_STATUS") && dataObj.status != "") {
         if (!datastr.includes("false")) {
           this.aiLoginDialogVisible = false;
           this.aiLoginStatus.qw = true;
@@ -759,6 +1002,20 @@ export default {
         } else {
           this.isClick.qw = true;
           this.isLoading.qw = false;
+        }
+      } else if (
+        datastr.includes("RETURN_MAX_STATUS") &&
+        dataObj.status != ""
+      ) {
+        if (!datastr.includes("false")) {
+          this.aiLoginDialogVisible = false;
+          this.aiLoginStatus.minimax = true;
+          this.accounts.minimax = dataObj.status;
+          this.isLoading.minimax = false;
+          console.log(this.isLoading.minimax);
+        } else {
+          this.isClick.minimax = true;
+          this.isLoading.minimax = false;
         }
       }
     },
@@ -774,14 +1031,14 @@ export default {
           this.scrollToBottom();
         });
       } else {
-        this.$message.error('WebSocket未连接');
+        this.$message.error("WebSocket未连接");
       }
     },
     // 格式化时间
     formatTime(date) {
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
     },
 
@@ -798,8 +1055,8 @@ export default {
   },
   beforeDestroy() {
     this.closeWebSocket(); // 销毁时关闭连接
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -815,7 +1072,7 @@ export default {
   }
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
   }
@@ -839,18 +1096,18 @@ export default {
 
 .stats-card {
   flex: 1;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .stats-number {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 8px;
-  color: #FF6B6B;
+  color: #ff6b6b;
 }
 
 .stats-label {
@@ -858,11 +1115,11 @@ export default {
 }
 
 .calendar-section {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .calendar-header {
@@ -898,12 +1155,12 @@ export default {
 }
 
 .calendar-day.signed {
-  background-color: #FF6B6B;
+  background-color: #ff6b6b;
   color: white;
 }
 
 .calendar-day.today {
-  border: 2px solid #FF6B6B;
+  border: 2px solid #ff6b6b;
 }
 
 .calendar-day.future {
@@ -919,7 +1176,7 @@ export default {
   height: 44px;
   font-size: 16px;
   margin-bottom: 20px;
-  background-color: #FF6B6B;
+  background-color: #ff6b6b;
   border: none;
   color: white;
   cursor: pointer;
@@ -927,15 +1184,15 @@ export default {
 }
 
 .sign-in-button:disabled {
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .history-section {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .history-title {
@@ -948,7 +1205,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .history-item:last-child {
@@ -961,7 +1218,7 @@ export default {
 
 .pull-right .el-button--text {
   padding: 0;
-  color: #409EFF;
+  color: #409eff;
 }
 
 .qr-code-container {
@@ -1003,12 +1260,12 @@ export default {
     .title-icon {
       margin-right: 8px;
       font-size: 18px;
-      color: #409EFF;
+      color: #409eff;
     }
   }
 
   .el-button--text {
-    color: #409EFF;
+    color: #409eff;
     font-size: 14px;
 
     &:hover {
@@ -1026,7 +1283,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 12px 0;
-      border-bottom: 1px solid #EBEEF5;
+      border-bottom: 1px solid #ebeef5;
       flex-wrap: nowrap; /* 防止项目换行 */
       overflow: hidden; /* 防止内容溢出 */
 
@@ -1044,7 +1301,7 @@ export default {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: #F5F7FA;
+          background: #f5f7fa;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1072,7 +1329,7 @@ export default {
 
           .loading-icon {
             margin-left: 8px;
-            color: #409EFF;
+            color: #409eff;
             font-size: 16px;
             animation: rotating 2s linear infinite;
           }
@@ -1082,7 +1339,7 @@ export default {
       .status-action {
         flex-shrink: 0; /* 防止按钮被压缩 */
         margin-left: 8px; /* 与平台名称保持距离 */
-        
+
         .status-tag {
           padding: 0px 12px;
           border-radius: 16px;
@@ -1114,15 +1371,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F5F7FA;
+  background: #f5f7fa;
   border-radius: 8px;
 }
 
 .qr-code {
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
   img {
     width: 1000px;
@@ -1145,13 +1402,13 @@ export default {
   align-items: center;
 
   &::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: 16px;
     height: 16px;
     margin-right: 8px;
-    border: 2px solid #DCDFE6;
-    border-top-color: #409EFF;
+    border: 2px solid #dcdfe6;
+    border-top-color: #409eff;
     border-radius: 50%;
     animation: loading 1s linear infinite;
   }
@@ -1199,7 +1456,7 @@ export default {
 
       .message-content {
         .message-text {
-          background: #409EFF;
+          background: #409eff;
           color: white;
         }
       }
