@@ -196,6 +196,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 res.put("message","offline");
                 return res.toJSONString();
             }
+
             // 构造消息内容
 //            JSONObject jsonObject = new JSONObject();
 //            jsonObject.put("keyword", userInfo.getKeyword());
@@ -213,6 +214,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
 
         if(clientId.contains("mypc") && message.contains("PLAY")){
+
             //web发给playwright
             JSONObject jsonObjectMsg = JSONObject.parseObject(message);
             // 获取 WebSocketSession
@@ -280,6 +282,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                     if (sessionpc == null || !sessionpc.isOpen()) {
                         System.out.println("mini" + "mini-"+userId + " 不在线或连接已关闭");
                     }else{
+
                         // 发送消息
                         sessionpc.sendMessage(new TextMessage(jsonObjectMsg.toJSONString()));
                     }

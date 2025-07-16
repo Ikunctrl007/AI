@@ -46,6 +46,7 @@ public class AIGCServiceImpl implements AIGCService {
     public ResultBody getNodeLog(WcChromeData wcChromeData) {
         PageHelper.startPage(wcChromeData.getPage(),wcChromeData.getLimit());
         List<Map> list = aigcMapper.getNodeLogList();
+        System.out.println("获取到的节点"+list);
         PageInfo pageInfo = new PageInfo(list);
         List<Map> resList = pageInfo.getList();
         for (Map map : resList) {
